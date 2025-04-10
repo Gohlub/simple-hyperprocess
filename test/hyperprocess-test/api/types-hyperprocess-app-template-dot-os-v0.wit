@@ -1,0 +1,4 @@
+world types-hyperprocess-app-template-dot-os-v0 {
+    import hyperprocess;
+    include lib;
+}

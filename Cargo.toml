@@ -1,0 +1,12 @@
+[profile.release]
+lto = true
+opt-level = "s"
+panic = "abort"
+
+[workspace]
+members = [
+    "hyperprocess",
+    "test/hyperprocess-test/hyperprocess-test",
+    "caller-utils",
+]
+resolver = "2"

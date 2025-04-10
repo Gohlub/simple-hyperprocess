@@ -1,0 +1,41 @@
+interface hyperprocess {
+    // This interface contains function signature definitions that will be used
+    // by the hyper-bindgen macro to generate async function bindings.
+    //
+    // NOTE: This is currently a hacky workaround since WIT async functions are not
+    // available until WASI Preview 3. Once Preview 3 is integrated into Hyperware,
+    // we should switch to using proper async WIT function signatures instead of
+    // this struct-based approach with hyper-bindgen generating the async stubs.
+
+    use standard.{address};
+
+    record hyperprocess-state {
+        state: list<tuple<string, string>>
+    }
+
+    // Function signature for: add-to-state (local)
+    record add-to-state-signature-local {
+        target: address,
+        key: string,
+        value: string,
+        returning: bool
+    }
+
+    // Function signature for: get-state (remote)
+    record get-state-signature-remote {
+        target: address,
+        returning: list<tuple<string, string>>
+    }
+
+    // Function signature for: get-state (local)
+    record get-state-signature-local {
+        target: address,
+        returning: list<tuple<string, string>>
+    }
+
+    // Function signature for: get-state-http (http)
+    record get-state-http-signature-http {
+        target: string,
+        returning: list<tuple<string, string>>
+    }
+}

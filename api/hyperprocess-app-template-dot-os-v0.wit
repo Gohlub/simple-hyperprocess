@@ -1,0 +1,4 @@
+world hyperprocess-app-template-dot-os-v0 {
+    import hyperprocess;
+    include process-v1;
+}

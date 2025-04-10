@@ -1,0 +1,17 @@
+[
+    {
+        "process_name": "hyperprocess-test",
+        "process_wasm_path": "/hyperprocess-test.wasm",
+        "on_exit": "None",
+        "request_networking": true,
+        "request_capabilities": [
+            "hyperprocess:hyperprocess:template.os",
+            "http-client:distro:sys"
+        ],
+        "grant_capabilities": [
+            "hyperprocess:hyperprocess:template.os",
+            "http-client:distro:sys"
+        ],
+        "public": true
+    }
+]

@@ -1,0 +1,5 @@
+world test-hyperprocess-app-template-dot-os-v0 {
+    import tester;
+    import hyperprocess;
+    include process-v1;
+}
