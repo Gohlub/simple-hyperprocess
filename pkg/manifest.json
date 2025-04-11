@@ -1,6 +1,6 @@
 [
     {
-        "process_name": "hyperprocess",
+        "process_name": "task-scheduler",
         "process_wasm_path": "/hyperprocess.wasm",
         "on_exit": "None",
         "request_networking": true,

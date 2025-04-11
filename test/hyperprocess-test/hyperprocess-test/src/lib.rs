@@ -1,5 +1,9 @@
 use crate::hyperware::process::tester::{FailResponse, Response as TesterResponse};
-use caller_utils::hyperprocess::{add_to_state_local_rpc, get_state_remote_rpc, get_state_local_rpc};
+use caller_utils::task_scheduler::{
+    create_task_local_rpc, get_task_local_rpc, get_all_tasks_local_rpc,
+    delegate_task_local_rpc, complete_task_local_rpc,
+    Task, TaskStatus
+};
 mod tester_lib;
 
 use hyperware_app_common::SendResult;
@@ -16,37 +20,87 @@ async_test_suite!(
         Ok(())
     },
 
-    // Test local add call
-    test_local_add_call: async {
-        let address: Address = ("hyperprocess.os", "hyperprocess", "hyperprocess", "template.os").into();
-        let key = "Hello".to_string();
-        let value = "World".to_string();
-        let result = add_to_state_local_rpc(&address, key, value).await;
-        print_to_terminal(0, &format!("add_to_state_local_rpc result: {:?}", result));
+    // Test task creation
+    test_create_task: async {
+        let address: Address = ("hyperprocess.os", "task-scheduler", "task-scheduler", "template.os").into();
+        let description = "Test task description".to_string();
+        
+        // Create a task
+        let result = create_task_local_rpc(&address, description.clone()).await;
+        match result {
+            SendResult::Success(task_id) => {
+                print_to_terminal(0, &format!("Created task with ID: {}", task_id));
+                
+                // Verify the task exists
+                let task_result = get_task_local_rpc(&address, task_id.clone()).await;
+                match task_result {
+                    SendResult::Success(Some(task)) => {
+                        if task.description != description {
+                            fail!("Task description mismatch");
+                        }
+                        if task.status != TaskStatus::Pending {
+                            fail!("Task status should be Pending");
+                        }
+                        if task.assigned_node.is_some() {
+                            fail!("Task should not be assigned yet");
+                        }
+                        print_to_terminal(0, &format!("Task verified: {:?}", task));
+                    },
+                    SendResult::Success(None) => {
+                        fail!("Task not found after creation");
+                    },
+                    _ => {
+                        fail!("Failed to get task");
+                    }
+                }
+            },
+            _ => {
+                fail!("Failed to create task");
+            }
+        }
         Ok(())
     },
 
-    // Test local get call
-    test_local_get_call: async {
-        let address: Address = ("hyperprocess.os", "hyperprocess", "hyperprocess", "template.os").into();
-        let result = get_state_local_rpc(&address).await;
-        print_to_terminal(0, &format!("get_state_local_rpc result: {:?}", result));
+    // Test get all tasks
+    test_get_all_tasks: async {
+        let address: Address = ("hyperprocess.os", "task-scheduler", "task-scheduler", "template.os").into();
+        
+        // Create a couple of tasks
+        let desc1 = "First test task".to_string();
+        let desc2 = "Second test task".to_string();
+        
+        let task_id1 = match create_task_local_rpc(&address, desc1).await {
+            SendResult::Success(id) => id,
+            _ => fail!("Failed to create first task")
+        };
+        
+        let task_id2 = match create_task_local_rpc(&address, desc2).await {
+            SendResult::Success(id) => id,
+            _ => fail!("Failed to create second task")
+        };
+        
+        // Get all tasks
+        let result = get_all_tasks_local_rpc(&address).await;
+        match result {
+            SendResult::Success(tasks) => {
+                print_to_terminal(0, &format!("Found {} tasks", tasks.len()));
+                
+                // Verify both tasks exist
+                let task1_exists = tasks.iter().any(|t| t.id == task_id1);
+                let task2_exists = tasks.iter().any(|t| t.id == task_id2);
+                
+                if !task1_exists || !task2_exists {
+                    fail!("Not all created tasks were returned");
+                }
+            },
+            _ => {
+                fail!("Failed to get all tasks");
+            }
+        }
+        
         Ok(())
     },
 
-    test_remote_get_call: async {
-        let address: Address = ("hyperprocess.os", "hyperprocess", "hyperprocess", "template.os").into();
-        // test_remote_call is a helper function that tests a remote call
-        // it takes a function, a expected result, and an error message
-        // it will fail if the result is not as expected
-        let expected_data = vec![("Hello".to_string(), "World".to_string())];
-        let result = test_remote_call(
-            get_state_remote_rpc(&address),
-            expected_data,
-            "wrong remote result"
-        ).await?;
-        print_to_terminal(0, &format!("remote_api_remote_rpc result: {:?}", result));
-        Ok(())
-    },
+    // Testing task delegation would require two nodes, which is more complex for initial testing
 
 );

@@ -32,7 +32,7 @@ crate-type = ["cdylib"]
 
 [package]
 edition = "2021"
-name = "hyperprocess"
+name = "task-scheduler"
 publish = false
 version = "0.1.0"
 

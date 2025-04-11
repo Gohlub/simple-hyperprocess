@@ -1,9 +1,9 @@
 {
-    "name": "Hyperprocess Test",
-    "description": "A test showcasing the hyperware app framework.",
+    "name": "Task Scheduler Test",
+    "description": "Test for the distributed task scheduler system.",
     "image": "",
     "properties": {
-        "package_name": "hyperprocess-test",
+        "package_name": "task-scheduler-test",
         "current_version": "0.1.0",
         "publisher": "template.os",
         "mirrors": [],
@@ -12,7 +12,7 @@
         },
         "wit_version": 1,
         "dependencies": [
-            "hyperprocess:template.os",
+            "task-scheduler:template.os",
             "tester:sys"
         ]
     },

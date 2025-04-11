@@ -1,4 +1,5 @@
 world hyperprocess-app-template-dot-os-v0 {
     import hyperprocess;
+    import task-scheduler;
     include process-v1;
 }

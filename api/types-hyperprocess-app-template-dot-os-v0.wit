@@ -1,4 +1,5 @@
 world types-hyperprocess-app-template-dot-os-v0 {
     import hyperprocess;
+    import task-scheduler;
     include lib;
 }

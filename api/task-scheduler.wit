@@ -1,0 +1,114 @@
+interface task-scheduler {
+    // This interface contains function signature definitions that will be used
+    // by the hyper-bindgen macro to generate async function bindings.
+    //
+    // NOTE: This is currently a hacky workaround since WIT async functions are not
+    // available until WASI Preview 3. Once Preview 3 is integrated into Hyperware,
+    // we should switch to using proper async WIT function signatures instead of
+    // this struct-based approach with hyper-bindgen generating the async stubs.
+
+    use standard.{address};
+
+    record task-scheduler-state {
+        tasks: list<tuple<string, task>>,
+        nodes: list<string>,
+        our-node: option<string>
+    }
+
+    // Function signature for: create-task (local)
+    record create-task-signature-local {
+        target: address,
+        description: string,
+        returning: string
+    }
+
+    // Function signature for: create-task (http)
+    record create-task-signature-http {
+        target: string,
+        description: string,
+        returning: string
+    }
+
+    // Function signature for: get-task (remote)
+    record get-task-signature-remote {
+        target: address,
+        task-id: string,
+        returning: option<task>
+    }
+ 
+    // Function signature for: get-task (local)
+    record get-task-signature-local {
+        target: address,
+        task-id: string,
+        returning: option<task>
+    }
+
+    // Function signature for: get-task (http)
+    record get-task-signature-http {
+        target: string,
+        task-id: string,
+        returning: option<task>
+    }
+
+    // Function signature for: get-all-tasks (remote)
+    record get-all-tasks-signature-remote {
+        target: address,
+        returning: list<task>
+    }
+
+    // Function signature for: get-all-tasks (local)
+    record get-all-tasks-signature-local {
+        target: address,
+        returning: list<task>
+    }
+
+    // Function signature for: get-all-tasks (http)
+    record get-all-tasks-signature-http {
+        target: string,
+        returning: list<task>
+    }
+
+    // Function signature for: delegate-task (local)
+    record delegate-task-signature-local {
+        target: address,
+        task-id: string,
+        target-node: string,
+        returning: bool
+    }
+
+    // Function signature for: delegate-task (http)
+    record delegate-task-signature-http {
+        target: string,
+        task-id: string,
+        target-node: string,
+        returning: bool
+    }
+
+    // Function signature for: assign-task (remote)
+    record assign-task-signature-remote {
+        target: address,
+        task: task,
+        returning: bool
+    }
+
+    // Function signature for: complete-task (local)
+    record complete-task-signature-local {
+        target: address,
+        task-id: string,
+        returning: bool
+    }
+
+    // Function signature for: complete-task (http)
+    record complete-task-signature-http {
+        target: string,
+        task-id: string,
+        returning: bool
+    }
+
+    // Function signature for: notify-completion (remote)
+    record notify-completion-signature-remote {
+        target: address,
+        task-id: string,
+        returning: bool
+    }
+}

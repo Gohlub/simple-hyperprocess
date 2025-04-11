@@ -1,9 +1,9 @@
 {
-    "name": "hyperprocess",
-    "description": "",
+    "name": "task-scheduler",
+    "description": "A distributed task scheduling system",
     "image": "",
     "properties": {
-        "package_name": "hyperprocess",
+        "package_name": "task-scheduler",
         "current_version": "0.1.0",
         "publisher": "template.os",
         "mirrors": [],
